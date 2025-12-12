@@ -1,9 +1,12 @@
-// Basit, localStorage tabanlı proje ve "giriş" sistemi
+// Basit kullanıcı sistemi (localStorage tabanlı)
+// Moderatör hesabı: EmirSeyfOS
 
 const MOD_USERNAME = "EmirSeyfOS";
 
 const usernameInput = document.getElementById("usernameInput");
+const passwordInput = document.getElementById("passwordInput");
 const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
 const currentUserLabel = document.getElementById("currentUser");
 const moderatorPanel = document.getElementById("moderatorPanel");
 const modName = document.getElementById("modName");
@@ -12,20 +15,21 @@ const projectForm = document.getElementById("projectForm");
 const projectsList = document.getElementById("projectsList");
 
 let currentUser = null;
+let users = {};
 let projects = [];
 
-// Sayfa açıldığında localStorage'dan verileri yükle
+// Sayfa açıldığında verileri yükle
 window.addEventListener("DOMContentLoaded", () => {
+    const savedUsers = localStorage.getItem("pk_users");
+    if (savedUsers) users = JSON.parse(savedUsers);
+
     const savedUser = localStorage.getItem("pk_currentUser");
-    if (savedUser) {
-        setUser(savedUser);
-    }
+    if (savedUser) setUser(savedUser);
+
     const savedProjects = localStorage.getItem("pk_projects");
     if (savedProjects) {
         projects = JSON.parse(savedProjects);
-        renderProjects();
     } else {
-        // Demo amaçlı 1-2 örnek proje
         projects = [
             {
                 name: "ProjeKeşfet Tanıtım",
@@ -35,17 +39,64 @@ window.addEventListener("DOMContentLoaded", () => {
             }
         ];
         saveProjects();
-        renderProjects();
     }
+
+    renderProjects();
+});
+
+// Kullanıcı kaydı
+registerBtn.addEventListener("click", () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!username || !password) {
+        alert("Kullanıcı adı ve şifre boş olamaz.");
+        return;
+    }
+
+    if (users[username]) {
+        alert("Bu kullanıcı adı zaten kayıtlı.");
+        return;
+    }
+
+    users[username] = { password };
+    saveUsers();
+
+    alert("Kayıt başarılı! Artık giriş yapabilirsin.");
+});
+
+// Giriş
+loginBtn.addEventListener("click", () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!username || !password) {
+        alert("Kullanıcı adı ve şifre gir.");
+        return;
+    }
+
+    if (!users[username]) {
+        alert("Böyle bir kullanıcı yok. Önce kayıt ol.");
+        return;
+    }
+
+    if (users[username].password !== password) {
+        alert("Şifre yanlış.");
+        return;
+    }
+
+    setUser(username);
 });
 
 // Kullanıcı ayarla
 function setUser(username) {
     currentUser = username;
-    currentUserLabel.textContent = username ? `Giriş yapıldı: ${username}` : "";
+    currentUserLabel.textContent = `Giriş yapıldı: ${username}`;
     usernameInput.value = "";
+    passwordInput.value = "";
+
     checkModerator();
-    localStorage.setItem("pk_currentUser", username || "");
+    localStorage.setItem("pk_currentUser", username);
 }
 
 // Moderatör kontrolü
@@ -59,31 +110,26 @@ function checkModerator() {
     }
 }
 
-// Giriş butonu
-loginBtn.addEventListener("click", () => {
-    const username = usernameInput.value.trim();
-    if (!username) {
-        alert("Kullanıcı adı boş olamaz.");
-        return;
-    }
-    setUser(username);
-});
+// Kullanıcıları kaydet
+function saveUsers() {
+    localStorage.setItem("pk_users", JSON.stringify(users));
+}
 
-// Proje formu gönderme
+// Proje gönderme
 projectForm.addEventListener("submit", (e) => {
     e.preventDefault();
+
+    if (!currentUser) {
+        alert("Proje paylaşmak için giriş yapmalısın.");
+        return;
+    }
 
     const name = document.getElementById("projectName").value.trim();
     const url = document.getElementById("projectUrl").value.trim();
     const description = document.getElementById("projectDescription").value.trim();
 
-    if (!currentUser) {
-        alert("Proje paylaşmak için önce kullanıcı adıyla giriş yap.");
-        return;
-    }
-
     if (!name || !url || !description) {
-        alert("Lütfen tüm alanları doldur.");
+        alert("Tüm alanları doldur.");
         return;
     }
 
@@ -94,21 +140,23 @@ projectForm.addEventListener("submit", (e) => {
         author: currentUser
     };
 
-    projects.unshift(newProject); // en yeni en üste
+    projects.unshift(newProject);
     saveProjects();
     renderProjects();
     projectForm.reset();
 });
 
-// Projeleri kaydet ve göster
+// Projeleri kaydet
 function saveProjects() {
     localStorage.setItem("pk_projects", JSON.stringify(projects));
 }
 
+// Projeleri listele
 function renderProjects() {
     projectsList.innerHTML = "";
+
     if (projects.length === 0) {
-        projectsList.innerHTML = "<p>Henüz proje yok. İlk projeyi sen paylaş!</p>";
+        projectsList.innerHTML = "<p>Henüz proje yok.</p>";
         return;
     }
 
@@ -139,7 +187,6 @@ function renderProjects() {
         const a = document.createElement("a");
         a.href = project.url;
         a.target = "_blank";
-        a.rel = "noopener noreferrer";
         a.textContent = "Projeye git";
         link.appendChild(a);
 
@@ -147,31 +194,27 @@ function renderProjects() {
         card.appendChild(desc);
         card.appendChild(link);
 
-        // Basit "moderatör" özelliği: sadece EmirSeyfOS projeyi silebilir
+        // Moderatör silme butonu
         if (currentUser === MOD_USERNAME) {
-            const modControls = document.createElement("div");
-            modControls.style.marginTop = "6px";
+            const del = document.createElement("button");
+            del.textContent = "Sil (Mod)";
+            del.style.marginTop = "6px";
+            del.style.background = "#dc2626";
+            del.style.color = "white";
+            del.style.border = "none";
+            del.style.padding = "4px 8px";
+            del.style.borderRadius = "4px";
+            del.style.cursor = "pointer";
 
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "Projeyi Sil (Mod)";
-            deleteBtn.style.fontSize = "0.75rem";
-            deleteBtn.style.padding = "4px 8px";
-            deleteBtn.style.borderRadius = "4px";
-            deleteBtn.style.border = "none";
-            deleteBtn.style.cursor = "pointer";
-            deleteBtn.style.background = "#dc2626";
-            deleteBtn.style.color = "#fee2e2";
-
-            deleteBtn.addEventListener("click", () => {
-                if (confirm(`"${project.name}" projesini silmek istediğine emin misin?`)) {
+            del.addEventListener("click", () => {
+                if (confirm("Bu projeyi silmek istiyor musun?")) {
                     projects.splice(index, 1);
                     saveProjects();
                     renderProjects();
                 }
             });
 
-            modControls.appendChild(deleteBtn);
-            card.appendChild(modControls);
+            card.appendChild(del);
         }
 
         projectsList.appendChild(card);
