@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>ProjeKeşfet - Scratch Proje Paylaşım Platformu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>ProjeKeşfet</h1>
+        <p>Scratch projelerini keşfet, paylaş ve ilham al.</p>
+    </header>
+
+    <nav class="top-bar">
+        <div class="logo">ProjeKeşfet</div>
+        <div class="user-area">
+            <input type="text" id="usernameInput" placeholder="Kullanıcı adı">
+            <button id="loginBtn">Giriş yap</button>
+            <span id="currentUser"></span>
+        </div>
+    </nav>
+
+    <main>
+        <section class="submit-section">
+            <h2>Proje Paylaş</h2>
+            <p>Scratch projenin linkini ve kısa açıklamasını gir.</p>
+            <form id="projectForm">
+                <label>
+                    Proje Adı:
+                    <input type="text" id="projectName" required>
+                </label>
+                <label>
+                    Scratch Proje Linki:
+                    <input type="url" id="projectUrl" placeholder="https://scratch.mit.edu/projects/..." required>
+                </label>
+                <label>
+                    Açıklama:
+                    <textarea id="projectDescription" rows="3" required></textarea>
+                </label>
+                <button type="submit">Gönder</button>
+            </form>
+        </section>
+
+        <section class="projects-section">
+            <h2>Yeni Projeler</h2>
+            <div id="projectsList" class="projects-list">
+                <!-- Projeler buraya JS ile eklenecek -->
+            </div>
+        </section>
+
+        <section class="moderator-section" id="moderatorPanel" style="display:none;">
+            <h2>Moderatör Paneli</h2>
+            <p>Giriş yapan kullanıcı: <strong id="modName"></strong></p>
+            <p>Not: Şu anda moderatör sadece kullanıcı adı <strong>EmirSeyfOS</strong> olduğunda aktif olur.</p>
+            <div class="mod-tools">
+                <h3>Bekleyen projeler</h3>
+                <p>Bu demo sürümde projeler direkt yayında, ama gerçek sistemde burada onay / silme vs. olabilir.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>ProjeKeşfet • Scratch topluluğu için bağımsız bir proje</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
