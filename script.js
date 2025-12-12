@@ -187,7 +187,10 @@ function renderProjects() {
         const a = document.createElement("a");
         a.href = project.url;
         a.target = "_blank";
-        a.textContent = "Projeye git";
+       // Scratch URL → TurboWarp Player URL
+const projectId = project.url.split("/projects/")[1].replace("/", "");
+a.href = `https://turbowarp.org/${projectId}/embed`;
+
         link.appendChild(a);
 
         card.appendChild(header);
