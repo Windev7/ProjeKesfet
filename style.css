@@ -1,0 +1,218 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+    background: #0f172a;
+    color: #e5e7eb;
+    min-height: 100vh;
+}
+
+header {
+    text-align: center;
+    padding: 32px 16px 16px;
+    background: linear-gradient(135deg, #1d4ed8, #6366f1);
+    color: white;
+}
+
+header h1 {
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+}
+
+header p {
+    opacity: 0.9;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    background: #020617;
+    border-bottom: 1px solid #1f2937;
+}
+
+.logo {
+    font-weight: 700;
+    color: #e5e7eb;
+}
+
+.user-area {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.user-area input {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #4b5563;
+    background: #020617;
+    color: #e5e7eb;
+}
+
+.user-area button {
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.user-area button:hover {
+    background: #1d4ed8;
+}
+
+#currentUser {
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+main {
+    max-width: 960px;
+    margin: 24px auto;
+    padding: 0 16px 32px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.2fr);
+    gap: 24px;
+}
+
+section {
+    background: #020617;
+    border-radius: 10px;
+    padding: 16px 18px 20px;
+    border: 1px solid #1f2937;
+}
+
+section h2 {
+    margin-bottom: 8px;
+}
+
+section p {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    color: #9ca3af;
+}
+
+.submit-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.submit-section label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.9rem;
+}
+
+.submit-section input,
+.submit-section textarea {
+    border-radius: 6px;
+    border: 1px solid #374151;
+    padding: 8px;
+    background: #020617;
+    color: #e5e7eb;
+    resize: vertical;
+}
+
+.submit-section button {
+    align-self: flex-start;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    background: #22c55e;
+    color: #022c22;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.submit-section button:hover {
+    background: #16a34a;
+}
+
+.projects-section {
+    grid-column: span 1;
+}
+
+.projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.project-card {
+    background: #020617;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+.project-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.project-title {
+    font-weight: 600;
+    color: #e5e7eb;
+}
+
+.project-user {
+    font-size: 0.8rem;
+    color: #9ca3af;
+}
+
+.project-desc {
+    margin: 6px 0;
+    font-size: 0.9rem;
+}
+
+.project-link {
+    font-size: 0.85rem;
+    color: #60a5fa;
+}
+
+.project-link a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.project-link a:hover {
+    text-decoration: underline;
+}
+
+.moderator-section {
+    grid-column: span 2;
+    margin-top: -8px;
+}
+
+footer {
+    text-align: center;
+    padding: 12px 16px 20px;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+/* Mobil uyum */
+@media (max-width: 768px) {
+    main {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .moderator-section {
+        grid-column: span 1;
+    }
+}
